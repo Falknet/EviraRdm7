@@ -32,6 +32,7 @@
 
 #include <linux/module.h>
 #include <linux/devfreq.h>
+#include <linux/state_notifier.h>
 #include <linux/msm_adreno_devfreq.h>
 
 #define ADRENO_IDLER_MAJOR_VERSION 1
@@ -50,21 +51,14 @@ static int idlewaitms = 500;
 module_param_named(adreno_idler_idlewaitms, idlewaitms, int, 0664);
 
 /* Taken from ondemand */
-static int downdifferenctial = 20;
-module_param_named(adreno_idler_downdifferenctial, downdifferenctial, int, 0664);
+static unsigned int downdifferential = 20;
+module_param_named(adreno_idler_downdifferential, downdifferential, uint, 0664);
 
-/* Master switch to activate whole routine */
-static int adreno_idler_active = 1;
-module_param_named(adreno_idler_active, adreno_idler_active, int, 0664);
+/* Master switch to activate the whole routine */
+static bool adreno_idler_active = true;
+module_param_named(adreno_idler_active, adreno_idler_active, bool, 0664);
 
-static inline int64_t get_time_inms(void) {
-	int64_t tinms;
-	struct timespec cur_time = current_kernel_time();
-	tinms  = cur_time.tv_sec  * MSEC_PER_SEC;
-	tinms += cur_time.tv_nsec / NSEC_PER_MSEC;
-	return tinms;
-}
-static int64_t idle_lasttime = 0;
+static unsigned int idlecount = 0;
 
 int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
 		 unsigned long *freq)
@@ -87,6 +81,10 @@ int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
 			*freq = devfreq->profile->freq_table[devfreq->profile->max_state - 1];
 			return 1;
 		}
+	} else if (state_suspended) {
+		/* GPU shouldn't be used for much while display is off, so ramp down the frequency */
+		*freq = devfreq->profile->freq_table[devfreq->profile->max_state - 1];
+		return 1;
 	} else {
 		/* This is the case where msm-adreno-tz don't use the lowest frequency.
 		   Mimic this behavior by bumping up the frequency. */
