@@ -953,7 +953,10 @@ config QCOM_CX_IPEAK
 	  bit in tcsr register if it is going to cross its own threshold. If all
 	  clients are going to cross their thresholds then Cx ipeak hw module will raise
 	  an interrupt to cDSP block to throttle cDSP fmax.
-
+	  
+config STATE_NOTIFIER
+    bool "State Notifier"
+    
 config MSM_CACHE_M4M_ERP64
        bool "Cache and M4M error report"
        depends on ARCH_MSM8996
