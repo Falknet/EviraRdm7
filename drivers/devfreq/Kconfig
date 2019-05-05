@@ -30,6 +30,15 @@ if PM_DEVFREQ
 
 comment "DEVFREQ Governors"
 
+config ADRENO_IDLER
+	tristate "MSM Adreno idler"
+	depends on DEVFREQ_GOV_MSM_ADRENO_TZ
+	help
+	  Uses a different calculation method on top of Adreno TZ
+	  just for calculating frequency for idle to reduce the
+	  wasted power coming from stock Adreno TZ while
+	  maintaining high-performance.
+	  
 config DEVFREQ_GOV_SIMPLE_ONDEMAND
 	tristate "Simple Ondemand"
 	help
@@ -172,14 +181,7 @@ config DEVFREQ_GOV_MEMLAT
 	  this uses target specific counters it can conflict with existing profiling
 	  tools.
 
-config ADRENO_IDLER
-	tristate "MSM Adreno idler"
-	depends on DEVFREQ_GOV_MSM_ADRENO_TZ
-	help
-	  Uses a different calculation method on top of Adreno TZ
-	  just for calculating frequency for idle to reduce the
-	  wasted power coming from stock Adreno TZ while
-	  maintaining high-performance
+
 
 comment "DEVFREQ Drivers"
 
@@ -204,6 +206,7 @@ config ARM_EXYNOS5_BUS_DEVFREQ
 	  This adds the DEVFREQ driver for Exynos5250 bus interface (vdd_int).
 	  It reads PPMU counters of memory controllers and adjusts the
 	  operating frequencies and voltages with OPP support.
+	  
 
 config ARM_TEGRA_DEVFREQ
        tristate "Tegra DEVFREQ Driver"
