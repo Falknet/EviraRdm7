@@ -477,10 +477,17 @@ config TCP_CONG_BIC
 	scalability. Under small congestion windows, binary search
 	increase provides TCP friendliness.
 	See http://www.csc.ncsu.edu/faculty/rhee/export/bitcp/
-	
+
+config TCP_CONG_CUBIC
+	tristate "CUBIC TCP"
+	default y
+	---help---
+	This is version 2.0 of BIC-TCP which uses a cubic growth function
+	among other techniques.
+	See http://www.csc.ncsu.edu/faculty/rhee/export/bitcp/cubic-paper.pdf
+
 config TCP_CONG_WESTWOOD
 	tristate "TCP Westwood+"
-	depends on INET
 	default m
 	---help---
 	TCP Westwood+ is a sender-side only modification of the TCP Reno
@@ -492,14 +499,6 @@ config TCP_CONG_WESTWOOD
 	account the bandwidth used  at the time congestion is experienced.
 	TCP Westwood+ significantly increases fairness wrt TCP Reno in
 	wired networks and throughput over wireless links.
-	
-config TCP_CONG_CUBIC
-	tristate "CUBIC TCP"
-	default y
-	---help---
-	This is version 2.0 of BIC-TCP which uses a cubic growth function
-	among other techniques.
-	See http://www.csc.ncsu.edu/faculty/rhee/export/bitcp/cubic-paper.pdf
 
 config TCP_CONG_HTCP
         tristate "H-TCP"
@@ -659,7 +658,7 @@ choice
 		bool "Veno" if TCP_CONG_VENO=y
 
 	config DEFAULT_WESTWOOD
-		bool "Westwood" if TCP_CONG_WESTWOOD=y
+		bool "Westwood" if TCP_CONG_WESTWOOD=y		
 
 	config DEFAULT_DCTCP
 		bool "DCTCP" if TCP_CONG_DCTCP=y
