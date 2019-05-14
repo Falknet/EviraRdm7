@@ -488,7 +488,7 @@ config TCP_CONG_CUBIC
 
 config TCP_CONG_WESTWOOD
 	tristate "TCP Westwood+"
-	default m
+	default y
 	---help---
 	TCP Westwood+ is a sender-side only modification of the TCP Reno
 	protocol stack that optimizes the performance of TCP congestion
@@ -583,6 +583,7 @@ config TCP_CONG_YEAH
 	For further details look here:
 	  http://wil.cs.caltech.edu/pfldnet2007/paper/YeAH_TCP.pdf
 
+	
 config TCP_CONG_ILLINOIS
 	tristate "TCP Illinois"
 	default n
@@ -672,10 +673,6 @@ endchoice
 
 endif
 
-config TCP_CONG_CUBIC
-	tristate
-	depends on !TCP_CONG_ADVANCED
-	default y
 
 config DEFAULT_TCP_CONG
 	string
