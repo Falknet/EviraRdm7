@@ -183,7 +183,7 @@ endif
 
 dtb-$(CONFIG_ARCH_MSMHAMSTER) += msmhamster-rumi.dtb
 
-dtb-$(CONFIG_ARCH_SDM660) += lave-2.dtb
+dtb-$(CONFIG_ARCH_SDM660) += evira.dtb
 
 dtb-$(CONFIG_ARCH_SDM630) += sdm630-rumi.dtb \
 	sdm630-pm660a-rumi.dtb \
